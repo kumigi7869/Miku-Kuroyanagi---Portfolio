@@ -10,16 +10,16 @@ const ShuffleApp: React.FC = () => {
     setInputWord(event.target.value);
   };
 
-  const handleAddWord = () => {
-    if (inputWord.trim() !== '') {
-      setWords([...words, inputWord]);
+  const handleAddWord = (word:string) => {
+    if (word.trim() !== '') {
+      setWords([...words, word]);
       setInputWord('');
     }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      handleAddWord();
+      handleAddWord(inputWord);
     }
   };
 
@@ -37,18 +37,22 @@ const ShuffleApp: React.FC = () => {
     setWords([]);
   };
 
+  const handleAddSavedWord = (word: string) => {
+    handleAddWord(word);
+  };
+
   return (
     <div className="app-container">
       <h1>ランチシャッフル!!!</h1>
       <div className="input-container">
         <input type="text" value={inputWord} onChange={handleInputChange} onKeyPress={handleKeyPress} />
-        <button onClick={handleAddWord}>追加</button>
+        <button onClick={() => handleAddWord(inputWord)}>追加</button>
       </div>
       <button className="shuffle-button" onClick={handleShuffle}>シャッフル</button>
       <ul className="word-list">
         {words.map((word, index) => (
           <li className="word-item" key={index}>
-            <span className="rank">{index + 1}</span>
+            <span className="rank">{index + 1 + "."}</span>
             <span className="word-text">{word}</span>
           </li>
         ))}
@@ -60,6 +64,12 @@ const ShuffleApp: React.FC = () => {
             {savedWords.map((savedWord, index) => (
               <li className="saved-word-item" key={index}>
                 {savedWord}
+                <button
+            className="add-button"
+            onClick={() => handleAddSavedWord(savedWord)}
+          >
+            追加
+          </button>
               </li>
             ))}
           </ul>
