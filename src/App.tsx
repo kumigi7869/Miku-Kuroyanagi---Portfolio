@@ -5,12 +5,14 @@ const ShuffleApp: React.FC = () => {
   const [words, setWords] = useState<string[]>([]);
   const [inputWord, setInputWord] = useState<string>('');
   const [savedWords, setSavedWords] = useState<string[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [firstWord, setFirstWord] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputWord(event.target.value);
   };
 
-  const handleAddWord = (word:string) => {
+  const handleAddWord = (word: string) => {
     if (word.trim() !== '') {
       setWords([...words, word]);
       setInputWord('');
@@ -30,6 +32,8 @@ const ShuffleApp: React.FC = () => {
       [shuffledWords[i], shuffledWords[j]] = [shuffledWords[j], shuffledWords[i]];
     }
     setWords(shuffledWords);
+    setFirstWord(shuffledWords[0]); // 1位のワードをセット
+    setShowModal(true); // モーダルを表示
   };
 
   const handleSaveWords = () => {
@@ -39,6 +43,10 @@ const ShuffleApp: React.FC = () => {
 
   const handleAddSavedWord = (word: string) => {
     handleAddWord(word);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
   };
 
   return (
@@ -65,16 +73,25 @@ const ShuffleApp: React.FC = () => {
               <li className="saved-word-item" key={index}>
                 {savedWord}
                 <button
-            className="add-button"
-            onClick={() => handleAddSavedWord(savedWord)}
-          >
-            追加
-          </button>
+                  className="add-button"
+                  onClick={() => handleAddSavedWord(savedWord)}
+                >
+                  追加
+                </button>
               </li>
             ))}
           </ul>
         )}
       </div>
+      {showModal && (
+        <div className="modal-overlay" onClick={handleModalClose}>
+          <div className="modal">
+            <h2>1位のお店</h2>
+            <p>{firstWord}</p>
+            <button onClick={handleModalClose}>閉じる</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
