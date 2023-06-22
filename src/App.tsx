@@ -44,6 +44,11 @@ const ShuffleApp: React.FC = () => {
   const handleAddSavedWord = (word: string) => {
     handleAddWord(word);
   };
+  const handleDeletedSavedWord = (index: number) => {
+    const updatedSavedWords = [...savedWords];
+    updatedSavedWords.splice(index, 1);
+    setSavedWords(updatedSavedWords);
+  };    
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -68,7 +73,7 @@ const ShuffleApp: React.FC = () => {
       <div className="save-container">
         <button className="save-button" onClick={handleSaveWords}>保存</button>
         {savedWords.length > 0 && (
-          <ul className="saved-words-list">
+         <ul className="saved-words-list">
             {savedWords.map((savedWord, index) => (
               <li className="saved-word-item" key={index}>
                 {savedWord}
@@ -78,6 +83,12 @@ const ShuffleApp: React.FC = () => {
                 >
                   追加
                 </button>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeletedSavedWord(index)}
+                >
+                  削除
+                  </button>
               </li>
             ))}
           </ul>
